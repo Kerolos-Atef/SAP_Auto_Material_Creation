@@ -572,8 +572,8 @@ button:disabled{opacity:.5;cursor:not-allowed}
       let res = null;
       try { res = await fetch(FLOW_URL, {method: "POST", headers: {"Content-Type": "application/json"}, body: payload}); }
       catch (_) {
-        // browser blocked reading the reply (CORS): send as a simple request instead; the reply can't be read but the data is delivered
-        await fetch(FLOW_URL, {method: "POST", mode: "no-cors", headers: {"Content-Type": "text/plain;charset=UTF-8"}, body: payload});
+        // browser blocked the JSON request (CORS): send as a standard form post with the JSON in a "payload" field
+        await fetch(FLOW_URL, {method: "POST", mode: "no-cors", body: new URLSearchParams({payload})});
       }
       if (res && !res.ok) throw new Error("HTTP " + res.status);
       resetSubmit();
